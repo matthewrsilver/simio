@@ -14,10 +14,11 @@ classdef simioEyeLink < dynamicprops
         timeOffset
         fixWindowRadius 
         trackedEyeNum
+        eyePosBounds
         
-        % constants
+        % constants, etc.
         left         = 1;
-        right        = 2; 
+        right        = 2;
 
     end
     
@@ -27,6 +28,7 @@ classdef simioEyeLink < dynamicprops
         function self = simioEyeLink(env)
            
             self.env = env;
+            self.eyePosBounds = [env.display.width env.display.height];
             self.fixWindowRadius = env.deg2px(env.config.fixationWindowSize/2);
             
             % Set the tracked eye
@@ -152,6 +154,21 @@ classdef simioEyeLink < dynamicprops
             
         end
         
+        % Get the current eye position
+        function eyePos = getEyePosition(self)
+            
+            % get the sample in the form of an event structure
+            samp   = Eyelink('NewestFloatSample');
+            eyePos = ceil([samp.gx(self.trackedEyeNum)    ...
+                           samp.gy(self.trackedEyeNum)]);
+            
+            % clean up eye position to ensure it's within bounds. Minimum
+            % value must be 1 because eyePos is used downstream as an array
+            % index within a window ID map.
+            eyePos = max(min(eyePos, self.eyePosBounds), 1);
+            
+        end
+        
         % Get the current status of fixation, for use with simioIO
         function fixating = fixation(self)
             
@@ -191,6 +208,17 @@ classdef simioEyeLink < dynamicprops
             if curEyeDist < self.env.deg2px(diameter/2);
                 fixating = true;
             end
+            
+        end
+        
+        function windowID = getGazeWindow(self, gazeWindowMap)
+                      
+            % Get the current eye position
+            eyePos   = self.getEyePosition();
+            
+            % Return the window ID of the current eye position,
+            % pulled from the gazeWindowMap
+            windowID = gazeWindowMap(eyePos);
             
         end
         
