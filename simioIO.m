@@ -11,6 +11,7 @@ classdef simioIO < dynamicprops
     
     properties(Hidden = true)
         dioudd
+        truth
     end
 
     methods
@@ -19,6 +20,7 @@ classdef simioIO < dynamicprops
         function self = simioIO(simio)
            
             self.env = simio;
+            self.truth.GetMethod = true;
                         
         end
         

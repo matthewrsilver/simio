@@ -36,12 +36,14 @@ classdef simio < handle
             'subjectName',       'subject',     ...
             'osdHeight',         200,           ...
             'backgroundColor',   [0   0   0],   ...
+            'osdBackgroundColor',[0   0   0],   ...
             'fixationPointColor',[255 255 255], ...
             'fixationWindowSize',4,             ...
             'calibrationColor',  [255 255 255], ...
             'calibrationSize',   1,             ...
             'calibrationWidth',  .5,            ...
             'calibrationEcc',    6,             ...
+            'cueColor',          [255 255 255], ...
             'trackedEye',        'right',       ...
             'dataPath',          '.',           ...
             'fileName',          '',            ...
@@ -115,6 +117,7 @@ classdef simio < handle
             self.taskRect = [0                  self.config.osdHeight   ...
                              self.display.width self.display.height];
             	    
+                         
             % Initialize the simioEyeLink object
             if self.config.useEyeLink
                 self.eye = simioEyeLink(self);
@@ -248,6 +251,42 @@ classdef simio < handle
             
         end
                
+%         function [err latency] = wait(self, duration, condition, interface, requirement)
+%         
+%             % Handle timing
+%             startTime = GetSecs;
+%             endTime   = startTime + duration/1000;
+%             
+%             % Default outputs
+%             latency   = NaN;
+%             err       = 0;
+%             
+%             % Handle the case where we're just waiting
+%             if nargin < 3
+%                 WaitSecs(endTime-GetSecs)
+%                 return;
+%             end         
+%             
+%             % If this is an 'until' call, reverse the logic
+%             if strcmp('until', condition)
+%                err         = 1;
+%                requirement = ~requirement; 
+%             end
+%             
+%             % Run the loop
+%             while GetSecs < endTime
+%                 if self.io.(interface) ~= requirement
+%                     latency = (GetSecs - startTime)*1000;
+%                     err     = ~err;
+%                     return;
+%                 end                 
+%             end
+%             
+%             % Pause briefly to keep loop running in a reasonable way
+%             WaitSecs(0.0001);
+%             
+%         end
+        
         % Wait for conditions to be met
         function [err latency] = wait(self, duration, varargin)
 
@@ -366,8 +405,12 @@ classdef simio < handle
             
         end
         
-        function drawCue(self, location, diameter)
+        function drawCue(self, location, diameter, color)
            
+            if ~exist('color', 'var')
+               color = self.config.cueColor; 
+            end
+            
             cueCenter = [self.displayCenter(1) + self.deg2px(location(1)), ...
                          self.displayCenter(2) + self.deg2px(location(2))];
             
@@ -377,9 +420,12 @@ classdef simio < handle
                          cueCenter(1) + round(diameter/2),   ...
                          cueCenter(2) + round(diameter/2)];
                      
+%             Screen('FillOval', self.ptb.windowPtr,           ...
+%                    self.config.cueColor,                     ...
+%                    destRect, diameter);
+%             
             Screen('FillOval', self.ptb.windowPtr,           ...
-                   self.config.cueColor,                     ...
-                   destRect, diameter);
+                   color, destRect, diameter);
             
                      
         end
@@ -398,7 +444,7 @@ classdef simio < handle
             % Clear the osd portion of the display by drawing a rectangle
             Screen('FillRect',                  ...
                    self.ptb.windowPtr,          ...
-                   self.config.backgroundColor, ...
+                   self.config.osdBackgroundColor, ...
                    self.osdRect);
                   
             % Iterate through the lines and draw them
