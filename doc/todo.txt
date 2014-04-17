@@ -1,0 +1,3 @@
+choose one structure for wait function (i.e. for eye position)
+rng shuffle not available in earlier releases?
+documentation (esp. main README and requirements...)
