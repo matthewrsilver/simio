@@ -1,0 +1,6 @@
+simio
+=====
+
+Simio is a training and stimulus presentation environment to wrap around [Psychtoolbox](http://psychtoolbox.org).
+
+
