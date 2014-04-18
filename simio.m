@@ -82,8 +82,7 @@ classdef simio < handle
                 % same (grabbed mostly from rng code) but not 
                 % certain, so display message...
                 disp('WARNING: Using old RandStream syntax')
-                s = RandStream(RandStream.getGlobalStream().Type, ...
-                               'Seed', RandStream.shuffleSeed);
+                s = RandStream('mt19937ar', 'Seed', RandStream.shuffleSeed);
                 RandStream.setGlobalStream(s);
             end
             
