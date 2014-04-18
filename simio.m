@@ -81,8 +81,8 @@ classdef simio < handle
                 % Roll back to earlier, ugly syntax. Should be the
                 % same (grabbed mostly from rng code) but not 
                 % certain, so display message...
-                disp('WARNING: Using old RandStream syntax')
-                s = RandStream('mt19937ar', 'Seed', RandStream.shuffleSeed);
+                disp('WARNING: Using old random number generation')
+                s = RandStream('mt19937ar', 'Seed', sum(100*clock));
                 RandStream.setGlobalStream(s);
             end
             
