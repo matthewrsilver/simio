@@ -74,8 +74,18 @@ classdef simio < handle
         % Constructor for the simio class
         function self = simio(varargin)
            
-            % First thing, shuffle the random number generator
-            rng('shuffle');
+            % First thing: shuffle the random number generator
+            try
+                rng('shuffle');
+            catch err
+                % Roll back to earlier, ugly syntax. Should be the
+                % same (grabbed mostly from rng code) but not 
+                % certain, so display message...
+                disp('WARNING: Using old RandStream syntax')
+                s = RandStream(RandStream.getGlobalStream().Type, ...
+                               'Seed', RandStream.shuffleSeed);
+                RandStream.setGlobalStream(s);
+            end
             
             % Extract and store configuration information
             for arg = 1:2:numel(varargin)

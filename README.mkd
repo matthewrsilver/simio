@@ -4,3 +4,15 @@ simio
 Simio is a training and stimulus presentation environment to wrap around [Psychtoolbox](http://psychtoolbox.org).
 
 
+### Prerequisites
+
+* Matlab version 2008b or later (I think....)
+* Psychtoolbox
+* Windows (may work in linux/mac but untested and unlikely)
+
+
+### Installation
+
+
+1. Put simio wherever you want
+2. Add installation directory to your Matlab path
