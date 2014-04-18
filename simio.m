@@ -83,7 +83,7 @@ classdef simio < handle
                 % certain, so display message...
                 disp('WARNING: Using old random number generation')
                 s = RandStream('mt19937ar', 'Seed', sum(100*clock));
-                RandStream.setGlobalStream(s);
+                RandStream.setDefaultStream(s);
             end
             
             % Extract and store configuration information
