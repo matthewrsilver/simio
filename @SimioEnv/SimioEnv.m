@@ -544,8 +544,11 @@ classdef SimioEnv < handle
         
         % Flip the screen, returning a timestamp
         function [timestamp strobeTimes] = flip(self, codes)
-            timestamp   = Screen('Flip', self.ptb.windowPtr, 0, 1);
+
+            % Strobe codes before flip, to ensure accurate
+            % post-flip timing (ie. reaction times)
             strobeTimes = self.strobeCodes(codes);
+            timestamp   = Screen('Flip', self.ptb.windowPtr, 0, 1);
         end
         
         % Set and strobe a vector of codes through event lines
@@ -602,9 +605,10 @@ classdef SimioEnv < handle
             pxPerCmHeight      = self.display.height/self.config.screenHeightCm;
             self.pxPerCm       = mean([pxPerCmWidth pxPerCmHeight]);
     
-            % Assert that pixels are square, based on measurements
-            assert(abs(pxPerCmWidth-pxPerCmHeight) < .1, ...
-                   'Pixels not square. Measure monitor in cm')
+            % Warn if pixels aren't square (based on measurements)
+            if abs(pxPerCmWidth-pxPerCmHeight) > .1
+                disp('WARNING: Pixels not square. Measure monitor in cm.')
+            end
 
             % Find the center of the screen from the subject perspective
             eyeCenterYCm       =   self.config.screenHeightCm     ...
