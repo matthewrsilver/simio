@@ -1,4 +1,4 @@
-classdef simioDAQ < dynamicprops
+classdef SimioDAQ < dynamicprops
     %SIMIODAQ DAQ OBJECT FOR USE WITH SIMIO TASK ENVIORONMENT
     %   
    
@@ -22,7 +22,7 @@ classdef simioDAQ < dynamicprops
     methods
         
         % Constructor for simioDAQ
-        function self = simioDAQ(env)
+        function self = SimioDAQ(env)
         
             % Handle back to simio
             self.env    = env;

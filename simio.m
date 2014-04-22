@@ -109,11 +109,11 @@ classdef simio < handle
             
             % Initialize simioIO object
             disp('Initializing Simio IO Interface...');
-            self.io  = simioIO(self);
+            self.io  = SimioIO(self);
 
             % Initialize simioDAQ object
             disp('Initializing Simio DAQ...');
-            self.daq = simioDAQ(self);
+            self.daq = SimioDAQ(self);
 
             % Initialize Psychtoolbox
             disp('Initializing Simio Psychtoolbox...');
@@ -128,7 +128,7 @@ classdef simio < handle
             	    
             % Initialize the simioEyeLink object
             if self.config.useEyeLink
-                self.eye = simioEyeLink(self);
+                self.eye = SimioEyeLink(self);
             end
                 
         end

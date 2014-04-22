@@ -1,4 +1,4 @@
-classdef simioEyeLink < dynamicprops
+classdef SimioEyeLink < dynamicprops
    
     properties
         
@@ -20,7 +20,7 @@ classdef simioEyeLink < dynamicprops
     methods
         
         % Constructor for simioEyeLink
-        function self = simioEyeLink(env)
+        function self = SimioEyeLink(env)
            
             % Set basic properties 
             self.env             = env;

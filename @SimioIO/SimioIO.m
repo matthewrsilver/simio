@@ -1,4 +1,4 @@
-classdef simioIO < dynamicprops
+classdef SimioIO < dynamicprops
     %SIMIOIO
     %   
    
@@ -17,7 +17,7 @@ classdef simioIO < dynamicprops
     methods
         
         % Constructor for simioIO
-        function self = simioIO(simio)
+        function self = SimioIO(simio)
            
             self.env = simio;
             self.truth.GetMethod = true;
