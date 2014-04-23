@@ -21,7 +21,7 @@ classdef SimioDAQ < dynamicprops
     
     methods
         
-        % Constructor for simioDAQ
+        % Constructor for SimioDAQ
         function self = SimioDAQ(env)
         
             % Handle back to simio

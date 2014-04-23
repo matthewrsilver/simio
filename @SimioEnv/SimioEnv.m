@@ -1,19 +1,20 @@
 classdef SimioEnv < handle
 %SIMIOENV Environment for monkey training
-%   Simio has three essential functions. To detect external events such
-%   as lever presses and eye movements though a DAQ and through
-%   ethernet, to display stimuli on the screen using PsychToolbox, and
-%   to mark important times with event codes through the DAQ.
+%   SimioEnv has three essential functions. To detect external
+%   events such as lever presses and eye movements though a DAQ 
+%   and through ethernet, to display stimuli on the screen using 
+%   Psychtoolbox, and to mark important times with event codes 
+%   through the DAQ.
     
     properties
         
-        % simioIO object, with hooks to IO interfaces in DAQ and EyeLink
+        % SimioIO object, with hooks to IO interfaces in DAQ and EyeLink
         io
 
-        % simioDAQ object
+        % SimioDAQ object
         daq
         
-        % simioEyeLink object
+        % SimioEyeLink object
         eye
         
         % Psychtoolbox information
@@ -72,7 +73,7 @@ classdef SimioEnv < handle
     
     methods
         
-        % Constructor for the simio class
+        % Constructor for the SimioEnv class
         function self = SimioEnv(varargin)
            
             % First thing: shuffle the random number generator

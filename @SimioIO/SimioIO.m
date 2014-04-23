@@ -16,7 +16,7 @@ classdef SimioIO < dynamicprops
 
     methods
         
-        % Constructor for simioIO
+        % Constructor for SimioIO
         function self = SimioIO(simio)
            
             self.env = simio;

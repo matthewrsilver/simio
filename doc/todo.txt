@@ -1,4 +1,2 @@
 choose one structure for wait function (i.e. for eye position)
 documentation (esp. main README and requirements...)
-
-create simio base object inherited by main simio... will handle be inherited?
