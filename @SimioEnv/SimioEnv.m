@@ -51,7 +51,19 @@ classdef SimioEnv < handle
                 s = RandStream('mt19937ar', 'Seed', sum(100*clock));
                 RandStream.setDefaultStream(s);
             end
-                        
+            
+            % Extract and store configuration information
+            for arg = 1:2:numel(varargin)
+                switch varargin{arg}
+                    case 'config'
+                        self.config = varargin{arg+1};
+                    case 'codes'
+                        self.code = varargin{arg+1};
+                    otherwise
+                        disp([varargin{arg} ' is not a valid parameter']);
+                end
+            end
+            
             % Using the configuration information, generate a file name
             self.generateUniqueFileName();
             
