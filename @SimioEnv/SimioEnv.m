@@ -58,7 +58,7 @@ classdef SimioEnv < handle
                     case 'config'
                         self.config = varargin{arg+1};
                     case 'codes'
-                        self.code = varargin{arg+1};
+                        self.codes = varargin{arg+1};
                     otherwise
                         disp([varargin{arg} ' is not a valid parameter']);
                 end
