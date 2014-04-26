@@ -52,17 +52,24 @@ classdef SimioEnv < handle
                 RandStream.setDefaultStream(s);
             end
             
-            % Extract and store configuration information
+            % Extract configuration and codes information
             for arg = 1:2:numel(varargin)
                 switch varargin{arg}
                     case 'config'
-                        self.config = varargin{arg+1};
+                        tmpConfig = varargin{arg+1};
                     case 'codes'
-                        self.codes = varargin{arg+1};
+                        tmpCodes = varargin{arg+1};
                     otherwise
                         disp([varargin{arg} ' is not a valid parameter']);
                 end
             end
+
+            % Mix in PTB class
+            self@SimioPsychtoolbox(tmpConfig);
+                        
+            self.config = tmpConfig;
+            self.codes  = tmpCodes;
+
             
             % Using the configuration information, generate a file name
             self.generateUniqueFileName();
@@ -83,7 +90,7 @@ classdef SimioEnv < handle
 
             % Initialize Psychtoolbox
             disp('Initializing Simio Psychtoolbox...');
-            self.initializePsychtoolbox();
+            %self.initializePsychtoolbox();
                 
             % Set rects for osd and task area, now that all is known
             self.osdRect  = [0                  0                       ...
