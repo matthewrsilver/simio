@@ -1,4 +1,4 @@
-classdef SimioEnv < handle
+classdef SimioEnv < handle & SimioPsychtoolbox
 %SIMIOENV Environment for monkey training
 %   SimioEnv has three essential functions. To detect external
 %   events such as lever presses and eye movements though a DAQ 
