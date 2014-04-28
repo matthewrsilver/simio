@@ -16,11 +16,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
         
         % SimioEyeLink object
         eye
-        
-        % Remaining psychtoolbox/screen properties that should be moved
-        osdRect
-        taskRect
-        
+                
         % Structs to store session and trial information
         sessionData
         currentTrial
@@ -61,6 +57,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             % Mix in PTB class
             self@SimioPsychtoolbox(tmpConfig);
                         
+            % Store config and codes as properties
             self.config = tmpConfig;
             self.codes  = tmpCodes;
             
@@ -80,11 +77,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             % Initialize simioDAQ object
             disp('Initializing Simio DAQ...');
             self.daq = SimioDAQ(self);
-
-            % Initialize Psychtoolbox
-            disp('Initializing Simio Psychtoolbox...');
-            %self.initializePsychtoolbox();                
-            	    
+           	    
             % Initialize the simioEyeLink object
             if self.config.useEyeLink
                 self.eye = SimioEyeLink(self);
