@@ -17,13 +17,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
         % SimioEyeLink object
         eye
         
-        % Psychtoolbox information
-        ptb
-                        
-        % Display information
-        display
-        displayCenter
-        pxPerCm
+        % Remaining psychtoolbox/screen properties that should be moved
         osdRect
         taskRect
         
@@ -69,7 +63,6 @@ classdef SimioEnv < handle & SimioPsychtoolbox
                         
             self.config = tmpConfig;
             self.codes  = tmpCodes;
-
             
             % Using the configuration information, generate a file name
             self.generateUniqueFileName();
@@ -90,14 +83,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
 
             % Initialize Psychtoolbox
             disp('Initializing Simio Psychtoolbox...');
-            %self.initializePsychtoolbox();
-                
-            % Set rects for osd and task area, now that all is known
-            self.osdRect  = [0                  0                       ...
-                             self.display.width self.config.osdHeight];
-                         
-            self.taskRect = [0                  self.config.osdHeight   ...
-                             self.display.width self.display.height];
+            %self.initializePsychtoolbox();                
             	    
             % Initialize the simioEyeLink object
             if self.config.useEyeLink
@@ -119,12 +105,6 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             Screen('CloseAll');
             
         end
-        
-
-            
-            
-        
-        
         
         % Converts degrees to pixels
         function px = deg2px(self, deg)
