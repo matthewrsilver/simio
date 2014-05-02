@@ -10,7 +10,7 @@ function eyeLinkDraw(self, command, details)
         case 'buffer'
             while numel(self.commandBuffer) > 0
                 Eyelink('Command', self.commandBuffer{end});
-                self.commandBuffer = self.commandBuffer{1:end-1};
+                self.commandBuffer = self.commandBuffer(1:end-1);
             end
             self.eyeLinkCommandBuffer('clear');
           
