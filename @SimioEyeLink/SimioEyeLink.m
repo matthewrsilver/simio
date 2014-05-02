@@ -1,4 +1,4 @@
-classdef SimioEyeLink < dynamicprops
+classdef SimioEyeLink < dynamicprops & handle
    
     properties
         
@@ -8,6 +8,8 @@ classdef SimioEyeLink < dynamicprops
         % Struct used by Psychtoolbox to talk to EyeLink
         settings
 
+        commandBuffer = {};
+        
         timeOffset
         fixWindowRadius 
         trackedEyeNum
