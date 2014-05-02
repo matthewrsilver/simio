@@ -4,7 +4,7 @@ function eyeLinkCommandBuffer(self, func, command)
     
     switch func
         case 'add'
-            self.commandBuffer = {commandBuffer{:} command};
+            self.commandBuffer = {self.commandBuffer{:} command}; %#ok<CCAT>
         case 'clear'
             self.commandBuffer = {};
     end
