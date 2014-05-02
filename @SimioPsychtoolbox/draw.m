@@ -29,14 +29,25 @@ function draw(self, drawStr, varargin)
                      self.displayCenter(2) - round(tSize(2)/2),   ...
                      self.displayCenter(1) + round(tSize(1)/2),   ...
                      self.displayCenter(2) + round(tSize(2)/2)];
-            
+
+        % Add this texture to the eyelink command buffer
+        if self.config.autoDrawEyeLink
+            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', destRect)) 
+        end
+        
         % Draw the texture
         Screen('DrawTexture', self.ptb.windowPtr, textureHandle, [], destRect);
     end
 
     % Draw a rectangle to the screen
     function drawRect(color, position)
-          
+
+        % Add this rect to the eyelink command buffer
+        if self.config.autoDrawEyeLink
+            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position)) 
+        end
+
+        
         Screen('FillRect', self.ptb.windowPtr, color, position);
         
     end
@@ -57,7 +68,13 @@ function draw(self, drawStr, varargin)
                      cueCenter(2) - round(diameter/2),   ...
                      cueCenter(1) + round(diameter/2),   ...
                      cueCenter(2) + round(diameter/2)];
-              
+
+        % Add this cue to the eyelink command buffer
+        if self.config.autoDrawEyeLink
+            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_cross %d %d 15', cueCenter)) 
+        end
+
+        
         Screen('FillOval', self.ptb.windowPtr,           ...
                color, destRect, diameter);
                         
@@ -77,6 +94,13 @@ function draw(self, drawStr, varargin)
         Screen('FillOval', self.ptb.windowPtr, ...
                self.config.fixationPointColor, ...
                destRect, diameter);
+
+        
+        % Add this cue to the eyelink command buffer
+        if self.config.autoDrawEyeLink
+            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_cross %d %d 15', self.displayCenter)) 
+        end
+
         
     end
 
