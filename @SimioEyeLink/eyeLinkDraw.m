@@ -6,6 +6,14 @@ function eyeLinkDraw(self, command, details)
         case 'clear'
             % Clear the eye link display
             Eyelink('Command',' clear_screen 0');
+
+        case 'buffer'
+            while numel(self.commandBuffer) > 0
+                Eyelink('Command', self.commandBuffer{end});
+                self.commandBuffer = self.commandBuffer{1:end-1};
+            end
+            self.eyeLinkCommandBuffer('clear');
+          
             
         case 'fix'
              % Draw a cross indicating subject center

@@ -1,6 +1,10 @@
 % Flip the screen, returning a timestamp
 function [timestamp, strobeTimes] = flip(self, codes)
 
+    if self.config.autoDrawEyeLink
+       self.eye.eyeLinkDraw('buffer');
+    end
+    
     % Strobe codes before flip, to ensure accurate
     % post-flip timing (ie. reaction times)
     strobeTimes = self.strobeCodes(codes);

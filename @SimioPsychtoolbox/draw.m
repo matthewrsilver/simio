@@ -44,7 +44,9 @@ function draw(self, drawStr, varargin)
 
         % Add this rect to the eyelink command buffer
         if self.config.autoDrawEyeLink
-            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position)) 
+            for r = 1:size(position, 1)
+            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position(1,:))) 
+            end           
         end
 
         
