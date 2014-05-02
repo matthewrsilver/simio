@@ -5,7 +5,7 @@ function eyeLinkDraw(self, command, details)
     switch command
         case 'clear'
             % Clear the eye link display
-            Eyelink('Command',' clear_screen 0');
+            Eyelink('Command','clear_screen 0');
 
         case 'buffer'
             while numel(self.commandBuffer) > 0

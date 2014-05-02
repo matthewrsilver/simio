@@ -64,7 +64,7 @@ function sd = runSession(self, preTrial, trial, postTrial, varargin)
         trial(self, varargin{:});
         
         % After the trial, ensure that the screen is clear
-        self.clearScreen();
+        self.draw('clear');
         self.flip(self.codes.screenClear);
         
         % %%%%%%%%%%%%% BEGIN ITI; POST TRIAL; MENU %%%%%%%%%%%% %

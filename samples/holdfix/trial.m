@@ -5,7 +5,7 @@ function trial(env, varargin)
     
     % Present fixation point
     env.eye.drawEyeLinkFix;
-    env.clearScreen();
+    env.draw('clear');
     env.draw('fixation', env.config.fixSize);
     env.flip(1);
     
@@ -19,7 +19,7 @@ function trial(env, varargin)
     % If there's an error, just end and go to the next trial
     if any(error) 
         env.currentTrial.trialError = 1;
-        env.clearScreen();
+        env.draw('clear');
         env.flip(1);
         return; 
     end
@@ -32,7 +32,7 @@ function trial(env, varargin)
     % If fixation is not maintained, wait for penalty time
     if any(error)
         env.currentTrial.trialError = 3;
-        env.clearScreen();
+        env.draw('clear');
         env.flip(1);
         env.wait(env.config.penaltyTime);
         return;
@@ -40,7 +40,7 @@ function trial(env, varargin)
     
     % At this point, the trial has been completed successfully, 
     % since errors always result in a return. Give reward and clear  
-    env.clearScreen();
+    env.draw('clear');
     env.flip(1);
     env.currentTrial.trialError = 0;
     env.goodMonkey(env.config.rewardNum, ...

@@ -1,6 +1,8 @@
 function draw(self, drawStr, varargin)
 
     switch drawStr
+        case 'clear'
+            clearScreen();
         case 'texture'
             drawTexture(varargin{:});
         case 'rect'
@@ -13,6 +15,20 @@ function draw(self, drawStr, varargin)
             disp('WARNING: Unrecognized draw type. Nothing drawn.')
     end
 
+    % Clear the task portion of the display by drawing a rectangle
+    function clearScreen()    
+        
+        if self.config.autoDrawEyeLink
+            self.eye.eyeLinkCommandBuffer('add', 'clear_screen 0')
+        end
+        
+        
+        Screen('FillRect',                  ...
+               self.ptb.windowPtr,          ...
+               self.config.backgroundColor, ...
+               self.taskRect);
+    end
+    
     
     % Draws a stored texture on the screen, default to eye center
     function drawTexture(textureHandle, varargin)
@@ -43,9 +59,9 @@ function draw(self, drawStr, varargin)
     function drawRect(color, position)
 
         % Add this rect to the eyelink command buffer
-        if self.config.autoDrawEyeLink
+        if self.config.autoDrawEyeLink && ndims(position) > 1
             for r = 1:size(position, 1)
-                self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position(1,:))) 
+                self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position(:,r))) 
             end           
         end
 
