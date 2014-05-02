@@ -1,14 +1,25 @@
-classdef SimioPsychtoolbox
+classdef SimioPsychtoolbox < handle
 % SIMIOPSYCHTOOLBOX Class used in mix-in to endow SimioEnv with PTB tools
     
+    properties
+       
+        ptb
+        display
+        displayCenter
+        osdRect
+        taskRect
+        pxPerCm
+        
+    end
+
     methods
    
         function self = SimioPsychtoolbox(config)
            
             % Extract information about screens
-            self.display       = Screen('Resolution', self.config.screen);
-            pxPerCmWidth       = self.display.width/self.config.screenWidthCm;
-            pxPerCmHeight      = self.display.height/self.config.screenHeightCm;
+            self.display       = Screen('Resolution', config.screen);
+            pxPerCmWidth       = self.display.width/config.screenWidthCm;
+            pxPerCmHeight      = self.display.height/config.screenHeightCm;
             self.pxPerCm       = mean([pxPerCmWidth pxPerCmHeight]);
             
             % Warn if pixels aren't square (based on measurements)
@@ -17,9 +28,9 @@ classdef SimioPsychtoolbox
             end
             
             % Find the center of the screen from the subject perspective
-            eyeCenterYCm       =   self.config.screenHeightCm     ...
-                + self.config.screenElevationCm  ...
-                - self.config.eyeElevationCm;
+            eyeCenterYCm       =   config.screenHeightCm     ...
+                                 + config.screenElevationCm  ...
+                                 - config.eyeElevationCm;
             eyeCenterX         = round(self.display.width/2);
             eyeCenterY         = round(eyeCenterYCm*self.pxPerCm);
             self.displayCenter = [eyeCenterX eyeCenterY]; 
@@ -44,8 +55,8 @@ classdef SimioPsychtoolbox
             
             % Now initialize the window
             self.ptb.windowPtr = Screen('OpenWindow',                  ...
-                                        self.config.screen,            ...
-                                        self.config.backgroundColor);
+                                        config.screen,            ...
+                                        config.backgroundColor);
             
             HideCursor;
             
@@ -56,9 +67,17 @@ classdef SimioPsychtoolbox
             self.ptb.textures = containers.Map('KeyType',   'int32',   ... 
                                                'ValueType', 'any');
             
+
+            % Set rects for osd and task area
+            self.osdRect  = [0                  0                       ...
+                             self.display.width config.osdHeight];
+                         
+            self.taskRect = [0                  config.osdHeight   ...
+                             self.display.width self.display.height];
+
             
         end
-        
+                
     end
     
 end

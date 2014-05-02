@@ -13,19 +13,26 @@ classdef Simio < SimioEnv
             % Add the config directory to the path 
             addpath([fileparts(mfilename('fullpath')) filesep 'config'])
    
-            % Extract user configuration information, and merge
-            % with default information in config dir
+            % Default (empty) user config and codes...
+            tmpConf  = struct();
+            tmpCodes = struct();
+            
+            % Extract user configuration information
             for arg = 1:2:numel(varargin)
                 switch varargin{arg}
                     case 'config'
-                        tmpConf = Simio.userConfig(varargin{arg+1});
+                        tmpConf  = varargin{arg+1};
                     case 'codes'
-                        tmpCodes = Simio.userCodes(varargin{arg+1});
+                        tmpCodes = varargin{arg+1};
                     otherwise
                         disp([varargin{arg} ' is not a valid parameter']);
                 end
             end
 
+            % Merge user configuration information with defaults
+            tmpConf = Simio.userConfig(tmpConf);
+            tmpCodes = Simio.userCodes(tmpCodes);
+            
             % Inherit SimioEnv
             self@SimioEnv('config', tmpConf, 'codes', tmpCodes);
             

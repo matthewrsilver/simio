@@ -16,17 +16,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
         
         % SimioEyeLink object
         eye
-        
-        % Psychtoolbox information
-        ptb
-                        
-        % Display information
-        display
-        displayCenter
-        pxPerCm
-        osdRect
-        taskRect
-        
+                
         % Structs to store session and trial information
         sessionData
         currentTrial
@@ -43,13 +33,13 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             % First thing: shuffle the random number generator
             try
                 rng('shuffle');
-            catch err
+            catch err %#ok<NASGU>
                 % Roll back to earlier, ugly syntax. Should be the
                 % same (grabbed mostly from rng code) but not 
                 % certain, so display message...
                 disp('WARNING: Using old random number generation')
                 s = RandStream('mt19937ar', 'Seed', sum(100*clock));
-                RandStream.setDefaultStream(s);
+                RandStream.setDefaultStream(s); %#ok<SETRS>
             end
             
             % Extract configuration and codes information
@@ -67,9 +57,9 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             % Mix in PTB class
             self@SimioPsychtoolbox(tmpConfig);
                         
+            % Store config and codes as properties
             self.config = tmpConfig;
             self.codes  = tmpCodes;
-
             
             % Using the configuration information, generate a file name
             self.generateUniqueFileName();
@@ -87,18 +77,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             % Initialize simioDAQ object
             disp('Initializing Simio DAQ...');
             self.daq = SimioDAQ(self);
-
-            % Initialize Psychtoolbox
-            disp('Initializing Simio Psychtoolbox...');
-            %self.initializePsychtoolbox();
-                
-            % Set rects for osd and task area, now that all is known
-            self.osdRect  = [0                  0                       ...
-                             self.display.width self.config.osdHeight];
-                         
-            self.taskRect = [0                  self.config.osdHeight   ...
-                             self.display.width self.display.height];
-            	    
+           	    
             % Initialize the simioEyeLink object
             if self.config.useEyeLink
                 self.eye = SimioEyeLink(self);
@@ -107,7 +86,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
         end
         
         % Desctructor for the simio class
-        function delete(self)
+        function delete(self) %#ok<INUSD>
 
             % Delete the daq, shutting down the engine.
             %delete(self.daq);
@@ -120,128 +99,10 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             
         end
         
-
-            
+        
             
         
         
-        
-        % Converts degrees to pixels
-        function px = deg2px(self, deg)
-           px = round(tand(deg)*self.config.screenDistanceCm*self.pxPerCm);
-        end
-        
-        % Makes a texture to be stored on the GPU for fast drawing
-        function h = makeTexture(self, image)  
-            h = Screen('MakeTexture', self.ptb.windowPtr, image);
-            self.ptb.textures(h) = size(image);
-        end
-        
-        % Lists all textures currently being stored
-        function textures = getTextures(self)
-            textures = self.ptb.textures.keys;
-        end
-                
-        % Draws a stored texture on the screen, default to eye center
-        function drawTexture(self, textureHandle, varargin)
-            
-            % Get the size of the texture
-            if isempty(varargin)
-                tSize = self.ptb.textures(textureHandle);
-            else
-                tSize = varargin{1};
-            end
-            
-            % Create a rect to define the screen position
-            destRect  = [self.displayCenter(1) - round(tSize(1)/2),   ...
-                         self.displayCenter(2) - round(tSize(2)/2),   ...
-                         self.displayCenter(1) + round(tSize(1)/2),   ...
-                         self.displayCenter(2) + round(tSize(2)/2)];
-            
-            % Draw the texture
-            Screen('DrawTexture', self.ptb.windowPtr, textureHandle, [], destRect);
-        end
-
-        % Draw a rectangle to the screen
-        function drawRect(self, color, position)
-            
-            Screen('FillRect', self.ptb.windowPtr, color, position);
-        
-        end
-        
-        % Draws a circular fixation point at the eye center
-        function drawFixation(self, diameter)
-            
-            % Create a rect to define the screen position
-            destRect  = [self.displayCenter(1) - round(diameter/2),   ...
-                         self.displayCenter(2) - round(diameter/2),   ...
-                         self.displayCenter(1) + round(diameter/2),   ...
-                         self.displayCenter(2) + round(diameter/2)];
-            
-            % Draw the circle on the screen
-            Screen('FillOval', self.ptb.windowPtr, ...
-                   self.config.fixationPointColor, ...
-                   destRect, diameter);
-            
-        end
-        
-        function drawCue(self, location, diameter, color)
-           
-            if ~exist('color', 'var')
-               color = self.config.cueColor; 
-            end
-            
-            cueCenter = [self.displayCenter(1) + self.deg2px(location(1)), ...
-                         self.displayCenter(2) + self.deg2px(location(2))];
-            
-            % Create a rect to define the screen position
-            destRect  = [cueCenter(1) - round(diameter/2),   ...
-                         cueCenter(2) - round(diameter/2),   ...
-                         cueCenter(1) + round(diameter/2),   ...
-                         cueCenter(2) + round(diameter/2)];
-                     
-%             Screen('FillOval', self.ptb.windowPtr,           ...
-%                    self.config.cueColor,                     ...
-%                    destRect, diameter);
-%             
-            Screen('FillOval', self.ptb.windowPtr,           ...
-                   color, destRect, diameter);
-            
-                     
-        end
-        
-        % Clear the screen
-        function clearScreen(self)
-            % Clear the task portion of the display by drawing a rectangle
-            Screen('FillRect',                  ...
-                   self.ptb.windowPtr,          ...
-                   self.config.backgroundColor, ...
-                   self.taskRect);
-        end
-        
-        % Write text to the on screen display
-        function updateOSD(self, osdText)
-            % Clear the osd portion of the display by drawing a rectangle
-            Screen('FillRect',                  ...
-                   self.ptb.windowPtr,          ...
-                   self.config.osdBackgroundColor, ...
-                   self.osdRect);
-                  
-            % Iterate through the lines and draw them
-            for line = 1:numel(osdText)
-                Screen('DrawText', self.ptb.windowPtr, osdText{line}, 10, 20*(line-1));
-            end
-        end
-            
-        
-        % Flip the screen, returning a timestamp
-        function [timestamp strobeTimes] = flip(self, codes)
-
-            % Strobe codes before flip, to ensure accurate
-            % post-flip timing (ie. reaction times)
-            strobeTimes = self.strobeCodes(codes);
-            timestamp   = Screen('Flip', self.ptb.windowPtr, 0, 1);
-        end
         
         % Set and strobe a vector of codes through event lines
         function strobeTimes = strobeCodes(self, codes, varargin)
@@ -358,32 +219,6 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             self.currentTrial.strobeTimes(end+1) = strobeTime; 
         end
        
-        % Generate a unique filename for the session
-        function generateUniqueFileName(self)
-
-            % Generate a filename for the current session, ensuring
-            % that no existing files are overwritten.
-            nameNeeded = 1;
-            nameNumber = 0;
-    
-            while nameNeeded
-        
-                putativeName = sprintf('%s-%s-%s-%02d.behavior',               ...
-                    self.config.experimentName,                    ...
-                    self.config.subjectName,                       ...
-                    datestr(date, 'yyyymmdd'),              ...
-                    nameNumber);
-        
-                % Now check the data directory, specified by dataPath, for any
-                % existing files with the putative name
-                nameNeeded = exist([self.config.dataPath putativeName], 'file') == 2;
-                nameNumber = nameNumber+1;
-                
-            end
-            
-            self.config.fileName = putativeName;
-            
-        end
 
         % Move information from currentTrial to sessionData
         function storeTrialData(self)
