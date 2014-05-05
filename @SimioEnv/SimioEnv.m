@@ -1,4 +1,4 @@
-classdef SimioEnv < handle & SimioPsychtoolbox
+classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
 %SIMIOENV Environment for monkey training
 %   SimioEnv has three essential functions. To detect external
 %   events such as lever presses and eye movements though a DAQ 
@@ -15,7 +15,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox
         daq
         
         % SimioEyeLink object
-        eye
+        %eye
                 
         % Structs to store session and trial information
         sessionData
@@ -56,7 +56,8 @@ classdef SimioEnv < handle & SimioPsychtoolbox
 
             % Mix in PTB class
             self@SimioPsychtoolbox(tmpConfig);
-                        
+            self@SimioEyeLink(tmpConfig);
+            
             % Store config and codes as properties
             self.config = tmpConfig;
             self.codes  = tmpCodes;
@@ -79,9 +80,9 @@ classdef SimioEnv < handle & SimioPsychtoolbox
             self.daq = SimioDAQ(self);
            	    
             % Initialize the simioEyeLink object
-            if self.config.useEyeLink
-                self.eye = SimioEyeLink(self);
-            end
+            %if self.config.useEyeLink
+            %    self.eye = SimioEyeLink(self);
+            %end
                 
         end
         

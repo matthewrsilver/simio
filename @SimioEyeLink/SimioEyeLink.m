@@ -2,61 +2,61 @@ classdef SimioEyeLink < dynamicprops & handle
    
     properties
         
-        % Handle back to simio
-        env
+        % Struct that holds EyeLink data 
+        eye
         
         % Struct used by Psychtoolbox to talk to EyeLink
-        settings
+        %settings
 
-        commandBuffer = {};
+        %commandBuffer = {};
         
-        timeOffset
-        fixWindowRadius 
-        trackedEyeNum
-        eyePosBounds
-        left  = 1;
-        right = 2;
+        %timeOffset
+        %fixWindowRadius 
+        %trackedEyeNum
+        %eyePosBounds
+        %left  = 1;
+        %right = 2;
 
     end
     
     methods
         
         % Constructor for SimioEyeLink
-        function self = SimioEyeLink(env)
+        function self = SimioEyeLink(config)
            
             % Set basic properties 
-            self.env             = env;
-            self.eyePosBounds    = [env.display.width env.display.height];
-            self.fixWindowRadius = env.deg2px(env.config.fixationWindowSize/2);
+            self.eye.eyePosBounds    = [self.display.width self.display.height];
+            self.eye.fixWindowRadius = self.deg2px(config.fixationWindowSize/2);
+            self.eye.commandBuffer   = {};
             
             % Set the tracked eye
-            if strcmp(env.config.trackedEye, 'left')
-                self.trackedEyeNum = self.left;
-            elseif strcmp(env.config.trackedEye, 'right')
-                self.trackedEyeNum = self.right;
+            if strcmp(config.trackedEye, 'left')
+                self.eye.trackedEyeNum = 1%self.left;
+            elseif strcmp(config.trackedEye, 'right')
+                self.eye.trackedEyeNum = 2%self.right;
             else
                 disp('Error establishing tracked eye. Using right');
-                self.trackedEyeNum = self.right;
+                self.eye.trackedEyeNum = 2%self.right;
             end
 
             % Psychtoolbox must be initialized first...
-            if isempty(env.ptb)
-                disp('Failed to initialize EyeLink: PTB uninitialized');
-                return;
-            end
+            %if isempty(env.ptb)
+            %    disp('Failed to initialize EyeLink: PTB uninitialized');
+            %    return;
+            %end
             
             % Get a struct with EyeLink default values. 
-            self.settings = EyelinkInitDefaults(env.ptb.windowPtr);
+            self.eye.settings = EyelinkInitDefaults(self.ptb.windowPtr);
              
             % Adjust the appearance of the calibration targets
-            self.settings.backgroundcolour        = env.config.backgroundColor;
-            self.settings.foregroundcolour        = env.config.calibrationColor;
-            self.settings.calibrationtargetcolour = env.config.calibrationColor;
-            self.settings.calibrationtargetsize   = env.config.calibrationSize;
-            self.settings.calibrationtargetwidth  = env.config.calibrationWidth;
+            self.eye.settings.backgroundcolour        = config.backgroundColor;
+            self.eye.settings.foregroundcolour        = config.calibrationColor;
+            self.eye.settings.calibrationtargetcolour = config.calibrationColor;
+            self.eye.settings.calibrationtargetsize   = config.calibrationSize;
+            self.eye.settings.calibrationtargetwidth  = config.calibrationWidth;
             
             % Delete callback to trigger 'old' PTB calibration method
-            self.settings.callback                = '';
+            self.eye.settings.callback                = '';
             
             % Now actually initialize the EyeLink, quitting on failure
             if ~EyelinkInit(0, 1)                    
@@ -74,31 +74,31 @@ classdef SimioEyeLink < dynamicprops & handle
             
             Eyelink('Command',                                               ...
                     'simulation_screen_distance = %d',                       ...
-                    round(env.config.screenDistanceCm)*10);
+                    round(config.screenDistanceCm)*10);
             
             Eyelink('Command',                                               ...
                     'screen_phys_coords = %d, %d, %d, %d',                   ...
-                    -10*env.config.screenWidthCm/2,                          ...
-                    -10*env.config.screenHeightCm/2,                         ...
-                     10*env.config.screenWidthCm/2,                          ...
-                     10*env.config.screenHeightCm/2);
+                    -10*config.screenWidthCm/2,                          ...
+                    -10*config.screenHeightCm/2,                         ...
+                     10*config.screenWidthCm/2,                          ...
+                     10*config.screenHeightCm/2);
                 
             Eyelink('Command',                                               ...
                     'screen_pixel_coords = 0, 0, %d, %d',                    ...
-                    round(env.display.width)-1,                              ...
-                    round(env.display.height)-1);
+                    round(self.display.width)-1,                              ...
+                    round(self.display.height)-1);
             
             % Set calibration target locations
-            calDegrees   = env.config.calibrationEcc;
+            calDegrees   = config.calibrationEcc;
             calCoords    = [ 0  0;  0  1;  0 -1;                             ... 
                             -1  0;  1  0; -1  1;                             ...   
                              1  1; -1 -1;  1 -1];  
             numCalTargs  = size(calCoords, 1);
-            calLocations = env.deg2px(calCoords*calDegrees);
+            calLocations = self.deg2px(calCoords*calDegrees);
             
             % Position those locations at the subject center
             calTargets   = calLocations +                                    ...
-                           repmat(env.displayCenter, numCalTargs, 1);
+                           repmat(self.displayCenter, numCalTargs, 1);
             
             % And send these targets
             calPrintStr  = repmat('%d,%d ', 1, numCalTargs);
@@ -122,8 +122,8 @@ classdef SimioEyeLink < dynamicprops & handle
             % Measure the time offset between Psychtoolbox time 
             % and EyeLink time
             Eyelink('Message', 'SYNCTIME');
-            self.timeOffset = Eyelink('TimeOffset');
-            self.env.sessionData.eyeLinkTimeOffset = self.timeOffset;
+            self.eye.timeOffset = Eyelink('TimeOffset');
+            self.sessionData.eyeLinkTimeOffset = self.eye.timeOffset;
 
             
         end
