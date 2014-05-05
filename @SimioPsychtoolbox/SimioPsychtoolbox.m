@@ -9,6 +9,7 @@ classdef SimioPsychtoolbox < handle
         osdRect
         taskRect
         pxPerCm
+        screenDistanceCm
         
     end
 
@@ -17,10 +18,11 @@ classdef SimioPsychtoolbox < handle
         function self = SimioPsychtoolbox(config)
            
             % Extract information about screens
-            self.display       = Screen('Resolution', config.screen);
-            pxPerCmWidth       = self.display.width/config.screenWidthCm;
-            pxPerCmHeight      = self.display.height/config.screenHeightCm;
-            self.pxPerCm       = mean([pxPerCmWidth pxPerCmHeight]);
+            self.display          = Screen('Resolution', config.screen);
+            pxPerCmWidth          = self.display.width/config.screenWidthCm;
+            pxPerCmHeight         = self.display.height/config.screenHeightCm;
+            self.pxPerCm          = mean([pxPerCmWidth pxPerCmHeight]);
+            self.screenDistanceCm = config.screenDistanceCm;
             
             % Warn if pixels aren't square (based on measurements)
             if abs(pxPerCmWidth-pxPerCmHeight) > .1

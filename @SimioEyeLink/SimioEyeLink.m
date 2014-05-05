@@ -31,12 +31,12 @@ classdef SimioEyeLink < dynamicprops & handle
             
             % Set the tracked eye
             if strcmp(config.trackedEye, 'left')
-                self.eye.trackedEyeNum = 1%self.left;
+                self.eye.trackedEyeNum = 1;%self.left;
             elseif strcmp(config.trackedEye, 'right')
-                self.eye.trackedEyeNum = 2%self.right;
+                self.eye.trackedEyeNum = 2;%self.right;
             else
                 disp('Error establishing tracked eye. Using right');
-                self.eye.trackedEyeNum = 2%self.right;
+                self.eye.trackedEyeNum = 2;%self.right;
             end
 
             % Psychtoolbox must be initialized first...
