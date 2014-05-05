@@ -29,7 +29,7 @@ function quit = osdMenu(self)
                 break;
               case 'c'
                 if ~isempty(self.eye)
-                    self.eye.calibrate();
+                    self.calibrate();
                     drawMenu = 1;
                 end
                 continue;

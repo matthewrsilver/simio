@@ -19,7 +19,7 @@ function draw(self, drawStr, varargin)
     function clearScreen()    
         
         if self.config.autoDrawEyeLink
-            self.eye.eyeLinkCommandBuffer('add', 'clear_screen 0')
+            self.eyeLinkCommandBuffer('add', 'clear_screen 0')
         end
         
         
@@ -48,7 +48,7 @@ function draw(self, drawStr, varargin)
 
         % Add this texture to the eyelink command buffer
         if self.config.autoDrawEyeLink
-            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', destRect)) 
+            self.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', destRect)) 
         end
         
         % Draw the texture
@@ -61,7 +61,7 @@ function draw(self, drawStr, varargin)
         % Add this rect to the eyelink command buffer
         if self.config.autoDrawEyeLink && ndims(position) > 1
             for r = 1:size(position, 2)
-                self.eye.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position(:,r))) 
+                self.eyeLinkCommandBuffer('add', sprintf('draw_box %d %d %d %d 15', position(:,r))) 
             end           
         end
 
@@ -89,7 +89,7 @@ function draw(self, drawStr, varargin)
 
         % Add this cue to the eyelink command buffer
         if self.config.autoDrawEyeLink
-            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_cross %d %d 15', cueCenter)) 
+            self.eyeLinkCommandBuffer('add', sprintf('draw_cross %d %d 15', cueCenter)) 
         end
 
         
@@ -116,7 +116,7 @@ function draw(self, drawStr, varargin)
         
         % Add this cue to the eyelink command buffer
         if self.config.autoDrawEyeLink
-            self.eye.eyeLinkCommandBuffer('add', sprintf('draw_cross %d %d 15', self.displayCenter)) 
+            self.eyeLinkCommandBuffer('add', sprintf('draw_cross %d %d 15', self.displayCenter)) 
         end
 
         

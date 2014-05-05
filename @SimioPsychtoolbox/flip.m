@@ -2,7 +2,7 @@
 function [timestamp, strobeTimes] = flip(self, codes)
 
     if self.config.autoDrawEyeLink
-       self.eye.eyeLinkDraw('buffer');
+       self.eyeLinkDraw('buffer');
     end
     
     % Strobe codes before flip, to ensure accurate

@@ -9,6 +9,6 @@ function eyePos = getEyePosition(self)
     % clean up eye position to ensure it's within bounds. Minimum
     % value must be 1 because eyePos is used downstream as an array
     % index within a window ID map.
-    eyePos = max(min(eyePos, self.eyePosBounds), 1);
+    eyePos = max(min(eyePos, self.eye.eyePosBounds), 1);
     
 end

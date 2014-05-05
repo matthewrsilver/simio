@@ -1,5 +1,8 @@
 function [target, latency] = waitTargetAcquired(self, duration, map)
-
+% DEPRECATED?
+    
+    
+    
     % Handle timing
     startTime = GetSecs;
     endTime   = startTime + duration/1000;
@@ -12,7 +15,7 @@ function [target, latency] = waitTargetAcquired(self, duration, map)
     while GetSecs < endTime
         
         % Get the window associated with the current eye position
-        window = self.eye.getGazeWindow(map);
+        window = self.getGazeWindow(map);
         
         % If the window is not the null window (0)...
         if window
