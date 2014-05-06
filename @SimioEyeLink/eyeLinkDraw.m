@@ -8,16 +8,16 @@ function eyeLinkDraw(self, command, details)
             Eyelink('Command','clear_screen 0');
 
         case 'buffer'
-            while numel(self.commandBuffer) > 0
-                Eyelink('Command', self.commandBuffer{end});
-                self.commandBuffer = self.commandBuffer(1:end-1);
+            while numel(self.eye.commandBuffer) > 0
+                Eyelink('Command', self.eye.commandBuffer{end});
+                self.eye.commandBuffer = self.eye.commandBuffer(1:end-1);
             end
-            self.eyeLinkCommandBuffer('clear');
+            self.eye.eyeLinkCommandBuffer('clear');
           
             
         case 'fix'
              % Draw a cross indicating subject center
-            Eyelink('Command', sprintf('draw_cross %d %d 10', self.env.displayCenter));
+            Eyelink('Command', sprintf('draw_cross %d %d 10', self.displayCenter));
                 
         case 'rect'
             % Draw a rectangle

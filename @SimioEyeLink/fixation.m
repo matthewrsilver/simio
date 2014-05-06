@@ -6,13 +6,13 @@ function fixating = fixation(self)
     
     % get the sample in the form of an event structure
     samp       = Eyelink('NewestFloatSample');
-    curEyePos  = ceil([samp.gx(self.trackedEyeNum)    ...
-                       samp.gy(self.trackedEyeNum)]);
-    curEyeDist = norm(self.env.displayCenter - curEyePos);
+    curEyePos  = ceil([samp.gx(self.eye.trackedEyeNum)    ...
+                       samp.gy(self.eye.trackedEyeNum)]);
+    curEyeDist = norm(self.displayCenter - curEyePos);
     
     % Test the distance between the eye position and
     % the center
-    if curEyeDist < self.fixWindowRadius
+    if curEyeDist < self.eye.fixWindowRadius
         fixating = true;
     end
     

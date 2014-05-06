@@ -5,7 +5,7 @@ function result = doTrackerSetup(self, sendkey)
 % work well with simio.
     
     % Get the PsychToolbox EyeLink settings struct and set return default
-    el     = self.settings;
+    el     = self.eye.settings;
     result = -1;
             
     Eyelink('Command', 'heuristic_filter = ON');
@@ -133,7 +133,7 @@ function result = doTrackerSetup(self, sendkey)
               case el.SPACE_BAR,	    	% 32: accept fixation
                 if el.allowlocaltrigger==1
                     Eyelink('AcceptTrigger');
-                    self.env.goodMonkey(2, 50, 30, self.env.codes.reward);
+                    self.goodMonkey(2, 50, 30, self.codes.reward);
                 end
                 break;
               case { 0,  el.JUNK_KEY	}	% No key
