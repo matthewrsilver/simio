@@ -14,9 +14,6 @@ classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
         % SimioDAQ object
         daq
         
-        % SimioEyeLink object
-        %eye
-                
         % Structs to store session and trial information
         sessionData
         currentTrial
@@ -58,7 +55,9 @@ classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
             self@SimioPsychtoolbox(tmpConfig);
             self@SimioEyeLink(tmpConfig);
             
-            % Store config and codes as properties
+            % Store config and codes as properties; must be done
+            % after construction of inherited classes, hence the
+            % passage of the config struct to each constructor.
             self.config = tmpConfig;
             self.codes  = tmpCodes;
             
@@ -83,23 +82,13 @@ classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
             % Now that we've got things configured in the EyeLink,
             % but before beginning calibration, etc, add a hook in
             % the main simio IO for fixation
-            try
-                self.io.addInterface('fixation', 'in', @(x)self.fixation);
-                %self.io.addInterface('fixation', 'in', @(x)true);
-            catch err
-                disp(err.message);
+            try self.io.addInterface('fixation', 'in', @(x)self.fixation);
+            catch err, disp(err.message);
             end
 
-            
-            
             % Initialize simioDAQ object
             disp('Initializing Simio DAQ...');
             self.daq = SimioDAQ(self);
-           	    
-            % Initialize the simioEyeLink object
-            %if self.config.useEyeLink
-            %    self.eye = SimioEyeLink(self);
-            %end
                 
         end
         

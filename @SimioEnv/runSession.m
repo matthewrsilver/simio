@@ -2,7 +2,10 @@
 function sd = runSession(self, preTrial, trial, postTrial, varargin)
 
     % %%%%%%%%%%%%%% PREPARE TO BEGIN THE SESSION %%%%%%%%%%%%%% %
-    
+
+    % Start with initialization of Psychtoolbox window
+    self.initWindow();
+        
     % Set various initial values
     self.sessionData.config        = self.config;
     self.sessionData.codes         = self.codes;
