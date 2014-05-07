@@ -51,7 +51,7 @@ classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
                 end
             end
 
-            % Mix in PTB class
+            % Inherit SimioPsychtoolbox and SimioEyeLink...
             self@SimioPsychtoolbox(tmpConfig);
             self@SimioEyeLink(tmpConfig);
             

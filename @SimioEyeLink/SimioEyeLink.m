@@ -46,8 +46,8 @@ classdef SimioEyeLink < dynamicprops & handle
             %end
             
             % Get a struct with EyeLink default values. 
-            self.eye.settings = EyelinkInitDefaults(self.ptb.windowPtr);
-             
+            self.eye.settings = EyelinkInitDefaults();
+            
             % Adjust the appearance of the calibration targets
             self.eye.settings.backgroundcolour        = config.backgroundColor;
             self.eye.settings.foregroundcolour        = config.calibrationColor;
@@ -105,17 +105,7 @@ classdef SimioEyeLink < dynamicprops & handle
             Eyelink('Command',                                               ...
                     sprintf(['calibration_targets = ' calPrintStr],          ...
                     reshape(calTargets', [], 1)));
-            
-%             % Now that we've got things configured in the EyeLink,
-%             % but before beginning calibration, etc, add a hook in
-%             % the main simio IO for fixation
-%             try
-%                 self.io.addInterface('fixation', 'in', @(x)self.fixation);
-%                 %self.io.addInterface('fixation', 'in', @(x)true);
-%             catch err
-%                 disp(err.message);
-%             end
-            
+                        
             % Prepare Eyelink screen to represent stimuli
             Eyelink('Command',' clear_screen 0');
             

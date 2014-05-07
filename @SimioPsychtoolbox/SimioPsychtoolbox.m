@@ -55,36 +55,6 @@ classdef SimioPsychtoolbox < handle
             self.taskRect = [0                  config.osdHeight   ...
                              self.display.width self.display.height];
             
-
-            %
-            %
-            % The following steps should be placed in another
-            % function, and deferred until it's time to run the task
-            %
-            %
-            
-            %% disable keyboard-in to Matlab; also speeds GetChar
-            %ListenChar(2);
-            %
-            %% Wait until all keys on keyboard are released:
-            %while KbCheck
-            %    WaitSecs(0.1);
-            %end
-            %
-            %% get rid of all keys in buffer
-            %FlushEvents('keyDown');
-            %
-            %% Now initialize the window
-            %self.ptb.windowPtr = Screen('OpenWindow',                  ...
-            %                            config.screen,            ...
-            %                            config.backgroundColor);
-            %
-            %% Set the text color to white (255). Must be after OpenWindow
-            %Screen('TextColor', self.ptb.windowPtr, 255);
-            %
-            %                        
-            %HideCursor;
-            
         end
                 
     end
