@@ -1,18 +1,33 @@
-simio
+Simio
 =====
 
-Simio is a training and stimulus presentation environment to wrap around [Psychtoolbox](http://psychtoolbox.org).
+Simio is a training and stimulus presentation environment to wrap around [Psychtoolbox](http://psychtoolbox.org).  In addition to handling stimulus presentation, Simio interacts with EyeLink and DAQ Systems to allow for the creation of tasks in which subjects interact with the environment.
 
 
 ### Prerequisites
 
 * Matlab version 2008b or later (I think....)
 * Psychtoolbox
+* EyeLink Psychtoolbox addons
 * Windows (may work in linux/mac but untested and unlikely)
 
 
 ### Installation
 
-
+0. Be sure all dependencies are satisfied (psychtoolbox, eyelink, etc.)
 1. Put simio wherever you want
 2. Add installation directory to your Matlab path
+
+### Basic Use
+
+In order to run a task, the Simio environment must be initialized, and then supplied with a task. To initialize a default Simio envirnonment called ```env```, simply use:
+
+```matlab
+env = Simio();
+```
+
+With the simio environment in place, we can run a session by supplying the function ```runSession()``` with a task function, that controls the real-time interaction between the screen, the eye tracker, and the DAQ:
+
+```matlab
+env.runSession(@(x), sampleTask, @(x));
+```
