@@ -12,7 +12,7 @@ function eyeLinkDraw(self, command, details)
                 Eyelink('Command', self.eye.commandBuffer{end});
                 self.eye.commandBuffer = self.eye.commandBuffer(1:end-1);
             end
-            self.eye.eyeLinkCommandBuffer('clear');
+            self.eyeLinkCommandBuffer('clear');
           
             
         case 'fix'

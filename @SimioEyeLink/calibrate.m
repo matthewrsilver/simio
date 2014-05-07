@@ -7,7 +7,7 @@ function result = calibrate(self)
     FlushEvents('keyDown');
     
     % Set the text color to white (255) after calibration
-    Screen('TextColor', self.env.ptb.windowPtr, 255);
+    Screen('TextColor', self.ptb.windowPtr, 255);
     
     % Start the recording
     Eyelink('StartRecording');
