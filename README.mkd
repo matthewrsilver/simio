@@ -20,14 +20,14 @@ Simio is a training and stimulus presentation environment to wrap around [Psycht
 
 ### Basic Use
 
-In order to run a task, the Simio environment must be initialized, and then supplied with a task. To initialize a default Simio envirnonment called '''env''', simply use:
+In order to run a task, the Simio environment must be initialized, and then supplied with a task. To initialize a default Simio envirnonment called ```env```, simply use:
 
-'''matlab
+```matlab
 env = Simio();
-'''
+```
 
-With the simio environment in place, we can run a session by supplying the function '''runSession''' with a task function, that controls the real-time interaction between the screen, the eye tracker, and the DAQ:
+With the simio environment in place, we can run a session by supplying the function ```runSession()``` with a task function, that controls the real-time interaction between the screen, the eye tracker, and the DAQ:
 
-'''matlab
+```matlab
 env.runSession(@(x), sampleTask, @(x));
-'''
+```
