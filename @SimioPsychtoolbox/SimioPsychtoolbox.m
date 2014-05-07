@@ -40,9 +40,7 @@ classdef SimioPsychtoolbox < handle
             % Prepare to write text using the fastest renderer
             Screen('Preference', 'TextRenderer',    0);
             Screen('Preference', 'DefaultFontSize', 14);
-            % Set the text color to white (255)
-            Screen('TextColor', self.ptb.windowPtr, 255);
-                        
+                                    
             % Specify a key name map.  PTB says to do this
             KbName('UnifyKeyNames');
             
@@ -81,6 +79,10 @@ classdef SimioPsychtoolbox < handle
                                         config.screen,            ...
                                         config.backgroundColor);
             
+            % Set the text color to white (255). Must be after OpenWindow
+            Screen('TextColor', self.ptb.windowPtr, 255);
+
+                                    
             HideCursor;
             
         end
