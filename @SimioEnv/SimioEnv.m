@@ -75,6 +75,23 @@ classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
             disp('Initializing Simio IO Interface...');
             self.io  = SimioIO(self);
 
+            
+            % This is a funny spot for initialization of the fixation
+            % interface, though it does make sense that it needs to be
+            % after SimioIO... Anyway:
+            %
+            % Now that we've got things configured in the EyeLink,
+            % but before beginning calibration, etc, add a hook in
+            % the main simio IO for fixation
+            try
+                self.io.addInterface('fixation', 'in', @(x)self.fixation);
+                %self.io.addInterface('fixation', 'in', @(x)true);
+            catch err
+                disp(err.message);
+            end
+
+            
+            
             % Initialize simioDAQ object
             disp('Initializing Simio DAQ...');
             self.daq = SimioDAQ(self);
