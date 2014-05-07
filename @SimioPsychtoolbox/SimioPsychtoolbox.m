@@ -40,9 +40,30 @@ classdef SimioPsychtoolbox < handle
             % Prepare to write text using the fastest renderer
             Screen('Preference', 'TextRenderer',    0);
             Screen('Preference', 'DefaultFontSize', 14);
-            
+            % Set the text color to white (255)
+            Screen('TextColor', self.ptb.windowPtr, 255);
+                        
             % Specify a key name map.  PTB says to do this
             KbName('UnifyKeyNames');
+            
+            % Set up other psychtoolbox stuff
+            self.ptb.textures = containers.Map('KeyType',   'int32',   ... 
+                                               'ValueType', 'any');
+
+            % Set rects for osd and task area
+            self.osdRect  = [0                  0                       ...
+                             self.display.width config.osdHeight];
+                         
+            self.taskRect = [0                  config.osdHeight   ...
+                             self.display.width self.display.height];
+            
+
+            %
+            %
+            % The following steps should be placed in another
+            % function, and deferred until it's time to run the task
+            %
+            %
             
             % disable keyboard-in to Matlab; also speeds GetChar
             ListenChar(2);
@@ -61,22 +82,6 @@ classdef SimioPsychtoolbox < handle
                                         config.backgroundColor);
             
             HideCursor;
-            
-            % Set the text color to white (255)
-            Screen('TextColor', self.ptb.windowPtr, 255);
-            
-            % Set up other psychtoolbox stuff
-            self.ptb.textures = containers.Map('KeyType',   'int32',   ... 
-                                               'ValueType', 'any');
-            
-
-            % Set rects for osd and task area
-            self.osdRect  = [0                  0                       ...
-                             self.display.width config.osdHeight];
-                         
-            self.taskRect = [0                  config.osdHeight   ...
-                             self.display.width self.display.height];
-
             
         end
                 
