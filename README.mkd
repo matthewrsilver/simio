@@ -7,9 +7,8 @@ Simio is a training and stimulus presentation environment to wrap around [Psycht
 ### Prerequisites
 
 * Matlab version 2008b or later (I think....)
-* Psychtoolbox
-* EyeLink Psychtoolbox addons
-* Windows (may work in linux/mac but untested and unlikely)
+* Psychtoolbox with EyelinkToolbox (prepackaged with v3 )
+* Tested on 32 bit Windows XP (may work in other environments, but untested and unlikely)
 
 
 ### Installation
@@ -18,16 +17,97 @@ Simio is a training and stimulus presentation environment to wrap around [Psycht
 1. Put simio wherever you want
 2. Add installation directory to your Matlab path
 
-### Basic Use
+### Basic Structure
 
-In order to run a task, the Simio environment must be initialized, and then supplied with a task. To initialize a default Simio envirnonment called ```env```, simply use:
+In order to run a task, the Simio environment must be initialized, and then supplied with a task. To initialize a Simio environment with default configuration called ```env```, simply use:
 
 ```matlab
 env = Simio();
 ```
 
-With the simio environment in place, we can run a session by supplying the function ```runSession()``` with a task function, that controls the real-time interaction between the screen, the eye tracker, and the DAQ:
+With the Simio environment in place, the next step is to provide a handle to a function that deals with running individual trials. This function can receive arguments at runtime. To specify a task function, run:
 
 ```matlab
-env.runSession(@(x), sampleTask, @(x));
+env.setTaskFunctions('trial', @sampleTrial);
 ```
+
+Finally, to begin the session:
+
+```matlab
+env.runSession();
+```
+
+### Simio environment with configuration and important features
+
+Generally, Simio will require configuration, and tasks will require variables during run time (e.g. fixation duration, stimulus size, etc.). Further, Simio passes marks events with codes -- and can strobe those codes to recording systems -- but these codes will often need to be stylized for a particular task.  To use custom configuration and codes, specify at construction:
+
+```matlab
+env = Simio('config', myConfigStruct, 'codes', myCodeStruct);
+```
+
+Typically, tasks will also require some special logic before and after trials. Before trials, for example, there may need to be analysis of previous trials as stimuli on the upcoming trial are selected. After trials, it is sometimes valuable to do some bookkeeping. Simio accepts pre-trial and post-trial function handles that it will run before and after each trial (post-trial handles occur during the ITI, so time-consuming operations oculd be run here). To use all three features:
+
+```matlab
+env.setTaskFunctions('preTrial',  @samplePreTrial, ...
+                     'trial',     @sampleTrial,    ...
+	             'postTrial', @samplePostTrial);
+```
+
+Finally, the Simio environment function runSession() accepts a variable number of arguments through ```varargin``` and passes them to the task functions. To pass arguments that can be used at run time:
+
+```matlab
+env.runSession(myImportantData, myStimulusInformation);
+```
+
+### Designing a task with Simio
+
+The task functions, described above, do most of the work.  There are a handful of critical methods in the Simio environment that are critical for building an interactive task.  To clear the screen, draw a stimulus, and present the stimulus on the screen, use the ```draw()``` and ```flip()``` methods:
+
+```matlab
+env.draw('clear');
+env.draw('rect', rectColor, rectPosition);
+env.flip(env.codes.stimPresented);
+```
+
+Note that the ```flip()``` function takes a code as an argument. Whenever the screen flips, it's a good idea to store an event code for describing what happened. This is useful for analysis later. Also, if information about the precise time at which the screen flip occurred is needed, the ```flip``` function returns a time, in seconds, since the initialization of Psychtoolbox:
+
+```matlab
+flipTime = env.flip(env.codes.stimPresented);
+```
+
+The time information returned is pulled from Psychtoolbox using the ```GetSecs``` function, which can also be used within Simio at any moment to establish task timing. The Simio environment automatically stores the start and end time of each trial, and of the session, using ```GetSecs```. 
+
+To allow interaction with Simio -- to wait for lever release or fixation acquisition -- use the ```wait()``` method:
+
+```matlab
+env.wait(env.config.initialDuration, 'until', 'fixation', true);
+```
+
+The first argument specifies the amount of time to wait in milliseconds. The subsequent arguments specify the waiting type (either ```while``` or ```until```), the I/O interface (here ```fixation```, more on this later), and the value which is being awaited.  Conjunctions of different interfaces are possible. So to wait for lever release while fixation is maintained:
+
+```matlab
+env.wait(env.config.releaseTime,    ...
+         'while', 'fixation', true, ...
+	 'until', 'lever',    false);
+```
+
+Another key method, ```goodMonkey()``` is used to reward subjects (typically with juice):
+
+```matlab
+env.goodMonkey(numRewardPulses, durationOfPulses, durationBetweenPulses, sendCode);
+```
+
+### Interfaces: Fixation, Levers, Buttons...
+
+Interfaces are added to the SimioIO class:
+
+```matlab
+env.io.addInterface( ... )
+```
+
+More on this later......
+
+
+
+
+
