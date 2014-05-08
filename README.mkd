@@ -83,7 +83,7 @@ To allow interaction with Simio -- to wait for lever release or fixation acquisi
 env.wait(env.config.initialDuration, 'until', 'fixation', true);
 ```
 
-The first argument specifies the amount of time to wait in milliseconds. The subsequent arguments specify the waiting type (either ```while``` or ```until```), the I/O interface (here ```fixation```, more on this later), and the value which is being awaited.  Conjunctions of different interfaces are possible. So to wait for lever release while fixation is maintained:
+The first argument specifies the amount of time to wait in milliseconds. The subsequent arguments specify the waiting type (either ```'while'``` or ```matlab 'until'```), the I/O interface (here ```fixation```, more on this later), and the value which is being awaited.  Conjunctions of different interfaces are possible. So to wait for lever release while fixation is maintained:
 
 ```matlab
 env.wait(env.config.releaseTime,    ...
