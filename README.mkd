@@ -45,12 +45,12 @@ Generally, Simio will require configuration, and tasks will require variables du
 env = Simio('config', myConfigStruct, 'codes', myCodeStruct);
 ```
 
-Typically, tasks will also require some special logic before and after trials. Before trials, for example, there may need to be analysis of previous trials as stimuli on the upcoming trial are selected. After trials, it is sometimes valuable to do some bookkeeping. Simio accepts pre-trial and post-trial function handles that it will run before and after each trial (post-trial handles occur during the ITI, so time-consuming operations oculd be run here). To use all three features:
+Typically, tasks will also require some special logic before and after trials. Before trials, for example, there may need to be analysis of previous trials as stimuli on the upcoming trial are selected. After trials, it is sometimes valuable to do some bookkeeping. Simio accepts pre-trial and post-trial function handles that it will run before and after each trial (post-trial handles occur during the ITI, so time-consuming operations could be run here). To use all three features:
 
 ```matlab
 env.setTaskFunctions('preTrial',  @samplePreTrial, ...
                      'trial',     @sampleTrial,    ...
-	             'postTrial', @samplePostTrial);
+                     'postTrial', @samplePostTrial);
 ```
 
 Finally, the Simio environment function runSession() accepts a variable number of arguments through ```varargin``` and passes them to the task functions. To pass arguments that can be used at run time:
@@ -88,7 +88,7 @@ The first argument specifies the amount of time to wait in milliseconds. The sub
 ```matlab
 env.wait(env.config.releaseTime,    ...
          'while', 'fixation', true, ...
-	 'until', 'lever',    false);
+         'until', 'lever',    false);
 ```
 
 Another key method, ```goodMonkey()``` is used to reward subjects (typically with juice):
