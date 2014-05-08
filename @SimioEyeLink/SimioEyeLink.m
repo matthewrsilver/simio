@@ -2,20 +2,10 @@ classdef SimioEyeLink < dynamicprops & handle
    
     properties
         
-        % Struct that holds EyeLink data 
+        % Struct that holds EyeLink data. Includes the following fields:
+        % settings, commandBuffer, timeOffset, fixWindowRadius,
+        % trackedEyeNum, eyePosBounds
         eye
-        
-        % Struct used by Psychtoolbox to talk to EyeLink
-        %settings
-
-        %commandBuffer = {};
-        
-        %timeOffset
-        %fixWindowRadius 
-        %trackedEyeNum
-        %eyePosBounds
-        %left  = 1;
-        %right = 2;
 
     end
     
@@ -38,12 +28,6 @@ classdef SimioEyeLink < dynamicprops & handle
                 disp('Error establishing tracked eye. Using right');
                 self.eye.trackedEyeNum = 2;%self.right;
             end
-
-            % Psychtoolbox must be initialized first...
-            %if isempty(env.ptb)
-            %    disp('Failed to initialize EyeLink: PTB uninitialized');
-            %    return;
-            %end
             
             % Get a struct with EyeLink default values. 
             self.eye.settings = EyelinkInitDefaults();
@@ -59,11 +43,23 @@ classdef SimioEyeLink < dynamicprops & handle
             self.eye.settings.callback                = '';
             
             % Now actually initialize the EyeLink, quitting on failure
-            if ~EyelinkInit(0, 1)                    
-                disp('Failed to initialize EyeLink: Reason Unknown');
+            try
+                if ~EyelinkInit(0, 1)                    
+                    disp('Failed to initialize EyeLink: Reason Unknown');
+                    return;
+                end
+            catch err
+                
+                % For now, assume this error is becuase there is no Eyelink
+                % connected to the system...
+                disp(['No EyeLink connected. Eyetracking functionality' ...
+                      ' will not be available during session. Attempts' ...
+                      ' to use EL functions may give ugly results...']);
+                  
                 return;
+                
             end
-            
+                
             % Send a few configuration commands to EyeLink
             Eyelink('Command', 'link_sample_data = LEFT, RIGHT, GAZE, AREA');
             Eyelink('Command', 'clear_screen 0');
@@ -72,38 +68,38 @@ classdef SimioEyeLink < dynamicprops & handle
             Eyelink('Command', 'generate_default_targets = NO');  
             Eyelink('Command', 'randomize_calibration_order = NO');  
             
-            Eyelink('Command',                                               ...
-                    'simulation_screen_distance = %d',                       ...
+            Eyelink('Command',                                          ...
+                    'simulation_screen_distance = %d',                  ...
                     round(config.screenDistanceCm)*10);
             
-            Eyelink('Command',                                               ...
-                    'screen_phys_coords = %d, %d, %d, %d',                   ...
-                    -10*config.screenWidthCm/2,                          ...
-                    -10*config.screenHeightCm/2,                         ...
-                     10*config.screenWidthCm/2,                          ...
+            Eyelink('Command',                                          ...
+                    'screen_phys_coords = %d, %d, %d, %d',              ...
+                    -10*config.screenWidthCm/2,                         ...
+                    -10*config.screenHeightCm/2,                        ...
+                     10*config.screenWidthCm/2,                         ...
                      10*config.screenHeightCm/2);
                 
-            Eyelink('Command',                                               ...
-                    'screen_pixel_coords = 0, 0, %d, %d',                    ...
-                    round(self.display.width)-1,                              ...
+            Eyelink('Command',                                          ...
+                    'screen_pixel_coords = 0, 0, %d, %d',               ...
+                    round(self.display.width)-1,                        ...
                     round(self.display.height)-1);
             
             % Set calibration target locations
             calDegrees   = config.calibrationEcc;
-            calCoords    = [ 0  0;  0  1;  0 -1;                             ... 
-                            -1  0;  1  0; -1  1;                             ...   
+            calCoords    = [ 0  0;  0  1;  0 -1;                        ... 
+                            -1  0;  1  0; -1  1;                        ...   
                              1  1; -1 -1;  1 -1];  
             numCalTargs  = size(calCoords, 1);
             calLocations = self.deg2px(calCoords*calDegrees);
             
             % Position those locations at the subject center
-            calTargets   = calLocations +                                    ...
+            calTargets   = calLocations +                               ...
                            repmat(self.displayCenter, numCalTargs, 1);
             
             % And send these targets
             calPrintStr  = repmat('%d,%d ', 1, numCalTargs);
-            Eyelink('Command',                                               ...
-                    sprintf(['calibration_targets = ' calPrintStr],          ...
+            Eyelink('Command',                                          ...
+                    sprintf(['calibration_targets = ' calPrintStr],     ...
                     reshape(calTargets', [], 1)));
                         
             % Prepare Eyelink screen to represent stimuli
