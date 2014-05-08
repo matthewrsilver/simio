@@ -1,11 +1,17 @@
 % Begin a trial loop, executing function handles pre, during, post
-function sd = runSession(self, preTrial, trial, postTrial, varargin)
+%function sd = runSession(self, preTrial, trial, postTrial, varargin)
+function sd = runSession(self, varargin)
 
     % %%%%%%%%%%%%%% PREPARE TO BEGIN THE SESSION %%%%%%%%%%%%%% %
 
     % Start with initialization of Psychtoolbox window
     self.initWindow();
         
+    % Get task function handles
+    preTrial  = self.preTrialHandle;
+    trial     = self.trialHandle;
+    postTrial = self.postTrialHandle;
+    
     % Set various initial values
     self.sessionData.config        = self.config;
     self.sessionData.codes         = self.codes;
