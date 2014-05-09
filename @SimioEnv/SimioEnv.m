@@ -22,9 +22,9 @@ classdef SimioEnv < handle & SimioPsychtoolbox & SimioEyeLink
 
         % Handles for task functions supplied by user. Initial
         % handles simply return an empty value.
-        preTrialHandle  = @(x)[];
-        trialHandle     = @(x)[];
-        postTrialHandle = @(x)[];
+        preTrialHandle  = @(varargin)[];
+        trialHandle     = @(varargin)[];
+        postTrialHandle = @(varargin)[];
         
     end
     

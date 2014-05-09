@@ -1,7 +1,10 @@
 function eyeLinkDraw(self, command, details)
 
-    if ~exist('details', 'var'), details = ''; end
+    % If there's no Eyelink, stop right now.
+    if ~self.eye.connected, return; end;
 
+    if ~exist('details', 'var'), details = ''; end
+    
     switch command
         case 'clear'
             % Clear the eye link display

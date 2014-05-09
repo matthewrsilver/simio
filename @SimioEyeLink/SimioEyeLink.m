@@ -44,22 +44,29 @@ classdef SimioEyeLink < dynamicprops & handle
             
             % Now actually initialize the EyeLink, quitting on failure
             try
-                if ~EyelinkInit(0, 1)                    
+                if ~EyelinkInit(0, 1) 
+                    self.eye.connected = false;
                     disp('Failed to initialize EyeLink: Reason Unknown');
                     return;
                 end
             catch err
+                
+                self.eye.connected = false;
                 
                 % For now, assume this error is becuase there is no Eyelink
                 % connected to the system...
                 disp(['No EyeLink connected. Eyetracking functionality' ...
                       ' will not be available during session. Attempts' ...
                       ' to use EL functions may give ugly results...']);
+                
                   
                 return;
                 
             end
                 
+            % If we made it here, there's an Eyelink present, and connected.
+            self.eye.connected = true;
+            
             % Send a few configuration commands to EyeLink
             Eyelink('Command', 'link_sample_data = LEFT, RIGHT, GAZE, AREA');
             Eyelink('Command', 'clear_screen 0');

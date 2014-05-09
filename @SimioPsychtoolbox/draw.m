@@ -11,6 +11,8 @@ function draw(self, drawStr, varargin)
             drawCue(varargin{:});
         case 'fixation'
             drawFixation(varargin{:});
+        case 'text'
+            drawText(varargin{:});
         otherwise
             disp('WARNING: Unrecognized draw type. Nothing drawn.')
     end
@@ -122,7 +124,15 @@ function draw(self, drawStr, varargin)
         
     end
 
-
+    function drawText(text, startPos)
+        
+        % If no start position is supplied, then draw at the subject center
+        if ~exist('startPos', 'var'), startPos = self.displayCenter; end
+           
+        % Draw the text
+        Screen('DrawText', self.ptb.windowPtr, text, startPos(1), startPos(2));
+                    
+    end
 
 
 
