@@ -1,6 +1,9 @@
 % Wait for conditions to be met
 function [err latency] = wait(self, duration, varargin)
 
+    % Because we might be looking for keystrokes
+    FlushEvents;
+
     % Handle timing
     startTime = GetSecs;
     endTime   = startTime + duration/1000;
@@ -30,7 +33,6 @@ function [err latency] = wait(self, duration, varargin)
     while GetSecs < endTime
         
         % First check 'while' arguments
-        %failures = ~cellfun(@(x)self.daq.(x{1})==x{2}, whileArgs);
         failures = ~cellfun(@(x)self.io.(x{1})==x{2}, whileArgs);
         if any(failures)
             latency = (GetSecs - startTime)*1000;
@@ -40,7 +42,6 @@ function [err latency] = wait(self, duration, varargin)
         
         % Now check 'until' arguments
         if ~isempty(untilArgs)
-            %compliant = cellfun(@(x)self.daq.(x{1})==x{2}, untilArgs);
             compliant = cellfun(@(x)self.io.(x{1})==x{2}, untilArgs);
             if all(compliant)
                 latency = (GetSecs - startTime)*1000;
