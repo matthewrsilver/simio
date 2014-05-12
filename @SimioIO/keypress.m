@@ -1,7 +1,5 @@
-function ch = keypress(self) %#ok<INUSD>
+function keydown = keypress(self) %#ok<INUSD>
 
-    % Use the Psychtoolbox function GetChar with 'getExtendedData'
-    % disabled...
-    ch = GetChar(0);
+    keydown = KbCheck;
     
 end

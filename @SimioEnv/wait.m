@@ -1,9 +1,6 @@
 % Wait for conditions to be met
 function [err latency] = wait(self, duration, varargin)
 
-    % Because we might be looking for keystrokes
-    FlushEvents;
-
     % Handle timing
     startTime = GetSecs;
     endTime   = startTime + duration/1000;
