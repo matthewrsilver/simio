@@ -7,7 +7,7 @@ function [err latency] = wait(self, duration, varargin)
     
     % Default outputs
     latency   = NaN;
-    numTests  = ceil((nargin-2)/3); 
+    numTests  = ceil((nargin-2)/3);
     err       = zeros(1, max(numTests, 1));
     
     % Handle the case where we're just waiting, and otherwise set
@@ -42,6 +42,7 @@ function [err latency] = wait(self, duration, varargin)
             if ~(untils(test) || same)
                 latency = (GetSecs - startTime)*1000;
                 err(test) = 1;
+                return;
             end
         end
     
