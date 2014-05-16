@@ -99,13 +99,13 @@ env.goodMonkey(numRewardPulses, durationOfPulses, durationBetweenPulses, sendCod
 
 ### Interfaces: Fixation, Levers, Buttons...
 
-Interfaces are added to the SimioIO class:
+Interfaces are added to an instance of the SimioIO class that is a property of Simio itself.  The SimioIO instance is called ```io``` and is only used directly by the user when configuring Simio to work with a new interface -- i.e. when setting up a task.  To add an interface, use the ```addInterface``` function:
 
 ```matlab
-env.io.addInterface( ... )
+env.io.addInterface('keypress', 'in', @env.io.keypress);
 ```
 
-More on this later......
+This code adds an interface called keypress that utilizes a function built into SimioIO that listens for keypresses.
 
 
 
