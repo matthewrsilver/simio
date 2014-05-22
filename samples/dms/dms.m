@@ -25,22 +25,7 @@ function [sessionData, env] = dms
     
     % Construct simio environment
     env = Simio('config', dms_config, 'codes',  dms_codes);
-    
-    % Convert stimulus sizes to degrees
-    env.config.fixationPointSizePx = env.deg2px(env.config.fixationPointSize);
-    env.config.stimulusSizePx      = env.deg2px(env.config.stimulusSize);
-            
-    % Add fields for stimulus numbers, matchTrials, etc. in the sessionData
-    % struct, so they can be stored and used during the session.
-    env.addSessionData('sampleStimulus',  [],                           ...
-                       'sampleCategory',  [],                           ...
-                       'testStimulus',    [],                           ...
-                       'testCategory',    [],                           ...
-                       'matchTrials',     [],                           ...
-                       'nonmatchTrials',  [],                           ...
-                       'matchFrequency',  []);
- 
-                   
+                      
     % Provide functions handles, dealing with the three task phases:
     % pre-trial, post-trial, and the trial itself.
     env.setTaskFunctions('preTrial',  @dmsPreTrial,                     ...
@@ -51,17 +36,27 @@ function [sessionData, env] = dms
     %% Initialize Stimulus Data
     %
     % Using cateogry and stimulus information from the configuration files,
-    % prepare stimuli for drawing on the screen.
+    % prepare stimuli for drawing on the screen. Here, we'll define each
+    % stimulus as a cell array containing the arguments that should be
+    % passed to the draw command. Because all stimuli are presented at the
+    % center, this is a particularly compact and convenient way to deal
+    % with things, but it limited to this case.
     
-    % What kind of data will I pass to the trial functions?
+    % Convert stimulus sizes to degrees
+    env.config.fixationPointSizePx = env.deg2px(env.config.fixationPointSize);
+    env.config.stimulusSizePx      = env.deg2px(env.config.stimulusSize);
+            
+    % Build a stimulus rect at the center of the screen
+    halfStim = round(env.config.stimulusSizePx/2);
+    stimRect = [env.displayCenter(1) - halfStim; 
+                env.displayCenter(2) - halfStim;
+                env.displayCenter(1) + halfStim; 
+                env.displayCenter(2) + halfStim]; 
     
-    % Colors?
-    % Textures?
-    % Arguments to env.draw?? <--- interesting, let's try it...
-    
-    % Cell array for each category 
-    stimuli{1} = {};
-    stimuli{2} = {};
+    %           |  type  |  RGB color  | position |
+    stimuli  = {{ 'rect', [255 100   0], stimRect }
+                { 'rect', [0   100 255], stimRect }
+                { 'rect', [0   255   0], stimRect }};
     
     
         
