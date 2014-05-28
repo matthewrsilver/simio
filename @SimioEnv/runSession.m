@@ -5,7 +5,9 @@ function sd = runSession(self, varargin)
     % %%%%%%%%%%%%%% PREPARE TO BEGIN THE SESSION %%%%%%%%%%%%%% %
 
     % Start with initialization of Psychtoolbox window
-    self.initWindow();
+    if ~self.windowInitialized
+        self.initWindow();
+    end
         
     % Get task function handles
     preTrial  = self.preTrialHandle;
