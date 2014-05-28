@@ -1,20 +1,18 @@
 function [sessionData, env] = dms
-%DMSCATEGORY Run the dmscategory experiment with simio/Psychtoolbox.
+%DMS Run the dms experiment with Simio/Psychtoolbox.
 %
-%   The dmscategory task is a version of the delayed match to sample (DMS)
-%   paradigm. During each trial of the DMS task, subjects are presented a 
-%   sample stimulus and, following a brief delay, a test stimulus.
-%   Subjects must indicate whether the test stimulus matches the sample
-%   stimulus, according to learned or specified match criteria. Often,
-%   subjects will respond when the stimuli match, and withhold the response
-%   when presented with a nonmatching test stimulus. If the subject
-%   correctly withholds the response on nonmatch trials, a matching
-%   stimulus is presented after a second delay interval. Response to this
-%   matching stimulus is then required for correct performance.
-%
-%   In the dmscategory task, stimuli are considered to match when they are
-%   drawn from the same category of dot stimuli, as described by Posner in
-%   1967 when introducing the "prototype distortion" task.
+%   The delayed match to sample (DMS) task is a useful paradigm for 
+%   measuring neural activity related to working memory. During each 
+%   trial of the DMS task, subjects are presented a sample stimulus and, 
+%   following a brief delay, a test stimulus. Subjects must indicate 
+%   whether the test stimulus matches the sample stimulus, according to 
+%   learned or specified match criteria -- here when the stimulus is the
+%   same. In this variant, subjects respond by releasing a lever when the 
+%   stimuli match, and withhold the response when presented with a 
+%   nonmatching test stimulus. If the subject correctly withholds the 
+%   response on nonmatch trials, a matching stimulus is presented after 
+%   a second delay interval. Response to this matching stimulus is then
+%   required for correct performance.
 
     
      %% Prepare the task environment
@@ -45,7 +43,12 @@ function [sessionData, env] = dms
     % Convert stimulus sizes to degrees
     env.config.fixationPointSizePx = env.deg2px(env.config.fixationPointSize);
     env.config.stimulusSizePx      = env.deg2px(env.config.stimulusSize);
-            
+    
+    % Make textures to allow for rapid stimulus drawing
+    image01 = imread('stim01.bmp');
+    h = env.makeTexture(image01);
+    
+    
     % Build a stimulus rect at the center of the screen
     halfStim = round(env.config.stimulusSizePx/2);
     stimRect = [env.displayCenter(1) - halfStim; 
@@ -55,8 +58,10 @@ function [sessionData, env] = dms
     
     %           |  type  |  RGB color  | position |
     stimuli  = {{ 'rect', [255 100   0], stimRect }
-                { 'rect', [0   100 255], stimRect }
-                { 'rect', [0   255   0], stimRect }};
+                { 'texture', h, [140 140]}};
+    %            { 'rect', [0   100 255], stimRect }
+    %            { 'rect', [0   255   0], stimRect }
+    %            { 'rect', [100   0 255], stimRect }};
     
     
         
@@ -68,10 +73,4 @@ function [sessionData, env] = dms
     
     sessionData = env.runSession(stimuli);
    
-        
-        
-        
-    
-    
-
 end
