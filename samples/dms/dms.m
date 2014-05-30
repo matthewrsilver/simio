@@ -45,9 +45,8 @@ function [sessionData, env] = dms
     env.config.stimulusSizePx      = env.deg2px(env.config.stimulusSize);
     
     % Make textures to allow for rapid stimulus drawing
-    image01 = imread('stim01.bmp');
-    h = env.makeTexture(image01);
-    
+    texture01 = env.makeTexture(imread('stim01.bmp'));
+    texture02 = env.makeTexture(imread('stim02.bmp'));
     
     % Build a stimulus rect at the center of the screen
     halfStim = round(env.config.stimulusSizePx/2);
@@ -57,11 +56,10 @@ function [sessionData, env] = dms
                 env.displayCenter(2) + halfStim]; 
     
     %           |  type  |  RGB color  | position |
-    stimuli  = {{ 'rect', [255 100   0], stimRect }
-                { 'texture', h, [140 140]}};
-    %            { 'rect', [0   100 255], stimRect }
-    %            { 'rect', [0   255   0], stimRect }
-    %            { 'rect', [100   0 255], stimRect }};
+    stimuli  = {{ 'rect',    [255 100   0], stimRect }
+                { 'rect',    [0   100 255], stimRect }
+                { 'texture', texture01,     stimRect }
+                { 'texture', texture02,     stimRect }};
     
     
         
