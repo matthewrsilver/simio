@@ -6,8 +6,8 @@ function fixating = fixation(self)
     
     % get the sample in the form of an event structure
     samp       = Eyelink('NewestFloatSample');
-    curEyePos  = ceil([samp.gx(self.eye.trackedEyeNum)    ...
-                       samp.gy(self.eye.trackedEyeNum)]);
+    curEyePos  = [samp.gx(self.eye.trackedEyeNum)    ...
+                  samp.gy(self.eye.trackedEyeNum)];
     
     %Slight timing improvement (~.01ms) from avoiding use of norm
     %curEyeDist = norm(self.displayCenter - curEyePos);
