@@ -1,4 +1,4 @@
-function [err latency] = wait(self, duration, varargin)
+function [err, latency] = wait(self, duration, varargin)
 % Wait for conditions to be met
 
     % Handle timing
