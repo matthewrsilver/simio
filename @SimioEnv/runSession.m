@@ -50,6 +50,19 @@ function sd = runSession(self, varargin)
             break; 
         end
         
+        % If the user chooses not to calibrate, then we must ensure that
+        % the system is recording (since recording is begun at the end
+        % of the calibration routine -- perhaps not ideal...).
+        if Eyelink('CheckRecording') ~= 0
+            % Flush the key events from the buffer before resuming
+            FlushEvents('keyDown');
+    
+            % Set the text color to white (255)
+            Screen('TextColor', self.ptb.windowPtr, 255);
+    
+            % Start the recording
+            Eyelink('StartRecording');
+        end
         
         % %%%%%%%%%%%% PREPARE FOR THE TRIAL IN ITI %%%%%%%%%%%% %
         
