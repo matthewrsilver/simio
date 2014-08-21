@@ -9,7 +9,7 @@ config.subjectEyeHeightCm    = 71;             % height subject eye from box flo
 config.backgroundColor       = [60 60 60];     % background color during task (0 - 255)
 config.fixationPointColor    = [255 0 0];      % color of fixation point      (0 - 255)
 config.fixationPointSize     = 0.5;            % diameter of fixation point       (deg)
-config.fixationWindowSize    = 7;              % diameter of fixation window      (deg)
+config.fixationWindowSize    = 5;              % diameter of fixation window      (deg)
 config.cueEccentricity       = 8;              % max eccentricity of cue grid     (deg)
 config.cueColor              = config.fixationPointColor;
 
@@ -17,7 +17,7 @@ config.cueColor              = config.fixationPointColor;
 config.initDuration          = 4000;           % time to wait for fixation         (ms)
 config.fixDuration           = 2000;           % duration of initial fixation      (ms)
 config.fixDurationJitter     = 1000;           % max random duration added to fix  (ms) 
-config.itiDuration           = 2000;           % duration of inter-trial interval  (ms)
+config.itiDuration           = 4000;           % duration of inter-trial interval  (ms)
 
 % Error and reward timing	          
 config.penaltyTime           = 6000;           % duration of penalty time          (ms)

@@ -12,8 +12,12 @@ function fixationTaskTrial(env, varargin)
     fixLocation  = fixationCoords{fixLocIndex};
     fixInterface = sprintf('fixation%d', fixLocIndex);
     
+    fixLocationPx = env.displayCenter + env.deg2px(fixLocation);
+    
     % Present a fixation point at the desired location
     env.draw('clear');
+    circCommands = env.eyeLinkDraw('circ', [env.eye.fixWindowRadius fixLocationPx]);
+    env.eyeLinkCommandBuffer('add', circCommands);
     env.draw('cue', fixLocation, env.config.fixationSizePx);
     env.flip(1);
         
