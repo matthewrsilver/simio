@@ -13,7 +13,7 @@ function [err, latency] = wait(self, duration, varargin)
     % Handle the case where we're just waiting, and otherwise set
     % the default output, using the number of tests specified
     if numTests < 1
-        WaitSecs(endTime-GetSecs)
+        WaitSecs(endTime-GetSecs);
         return;
     end
        
